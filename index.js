@@ -17,6 +17,13 @@ async function connect() {
 }
 connect()
 
+app.get('/books', async (req, res) => {
+        const cursor = await booksCollection.find({})
+        const result = await cursor.toArray()
+
+    res.status(200).json(result)
+})
+
 app.get('/books/:id', async (req, res) => {
     let id = req.params.id
 
