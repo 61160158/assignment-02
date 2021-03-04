@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient
+const ObjectId = require('mongodb').ObjectId
 const express = require('express')
 const app = express()
 
@@ -19,7 +20,9 @@ connect()
 app.get('/books/:id', async (req, res) => {
     let id = req.params.id
 
-    res.status(200).json(books[id])
+    const book = await booksCollection.findOne({ _id: ObjectId(id) })
+
+    res.status(200).json(book)
 })
 
 app.post('/books', async (req, res) => {
@@ -41,9 +44,6 @@ app.post('/books', async (req, res) => {
 
     const result = await booksCollection.insertOne(newBook)
     bookID = result.insertedId
-
-    // books.push(newBook)
-    // bookID = books.length-1
 
     res.status(201).json(bookID)
 })
